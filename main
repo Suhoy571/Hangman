@@ -1,0 +1,65 @@
+import random
+
+
+def guess_word(state, word_to_guess, letter):
+    state = list(state)
+    word_to_guess = list(word_to_guess)
+    i = 0
+    while i < len(word_to_guess):
+        if letter == word_to_guess[i]:
+            state[i] = letter
+        i += 1
+    return ''.join(state)
+
+
+print('H A N G M A N')
+while True:
+    user_input = input('Type "play" to play the game, "exit" to quit: ')
+    print()
+    if user_input == 'play':
+        word_to_guess = random.choice(['python', 'java', 'kotlin', 'javascript'])
+        guessed_state = '-' * len(word_to_guess)
+
+        lives = 8
+        iteration = 0
+        checked_letters = []
+        while True:
+            print(guessed_state)
+            letter = input('Input a letter: ')
+            if letter.islower() and letter.isalpha() and len(letter) == 1:
+                if letter in guessed_state or letter in checked_letters:
+                    checked_letters.append(letter)
+                    print("You've already guessed this letter")
+                    if lives == 0:
+                        print("You lost!")
+                        print()
+                        break
+                    if guessed_state == word_to_guess:
+                        print("You guessed the word!\nYou survived!")
+                        print()
+                        break
+                elif letter in list(word_to_guess):
+                    guessed_state = guess_word(guessed_state, word_to_guess, letter)
+                    checked_letters.append(letter)
+                    iteration += 1
+                else:
+                    print("That letter doesn't appear in the word")
+                    checked_letters.append(letter)
+                    lives -= 1
+                    iteration += 1
+                if guessed_state == word_to_guess:
+                    print(f"You guessed the word {word_to_guess}!\nYou survived!")
+                    print()
+                    break
+                if lives == 0:
+                    print("You lost!")
+                    print()
+                    break
+            else:
+                if letter.islower() == False and len(letter) == 1 or letter.isalpha() == False and len(letter) == 1:
+                    print("Please enter a lowercase English letter")
+                else:
+                    print("You should input a single letter")
+            print()
+    else:
+        break
